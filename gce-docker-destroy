@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if ! [ -e .lock ]; then
+  echo "Nothing to do."
+  exit 0
+fi
+
 source config_file
 
 if ! [ "$1" = "-y" ]; then
@@ -10,9 +15,13 @@ if ! [ "$1" = "-y" ]; then
 fi
 
 echo "Deleting instance!"
-gcloud compute instances delete -q  $NAME  --delete-disks all \
---project   $PROJECT --zone   $ZONE
 
-rm .lock
+if [ -e .lock-stop ]; then
+  gcloud compute disks delete $NAME $NAME-disk
+else
+  gcloud compute instances delete -q  $NAME  --delete-disks all --project   $PROJECT --zone   $ZONE
+fi
+
+rm -f .lock .lock-stop
 
 echo "Done."
