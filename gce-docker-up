@@ -53,4 +53,4 @@ echo "You can log into the new machine by running the follwing command:"
 echo "gce-docker-ssh"
 
 echo "DON'T FORGET TO UPLOAD THE NEW IMAGES TO THE REGISTRY AND DESTROY THE MACHINE ONCE YOU ARE DONE!"
-echo "gce-docker-delete"
+echo "gce-docker-destroy"
