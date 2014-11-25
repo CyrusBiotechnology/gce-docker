@@ -1,4 +1,4 @@
-The scripts in this folder create, connect and destroy to a new virtual machine ruinning in google compute engine.
+The scripts in this folder create, connect and destroy to a new virtual machine ruinning in google compute engine. The scripts implement five commands(init, up, ssh, stop, destroy) that resemble vagrant's behavior.
 
 Prerequisites:
 
@@ -10,34 +10,39 @@ Before you can use this scripts you need to be logged into your account:
 gcloud auth login
 ```
 
-And have authorization to crate VMs in the Cyrus project. If you haven't been authorized yet [email me](mailto:javier@cyrusbio.com).
-
 Usage
 -----
 
 Create configuration file:
 
 ```
-./docker-init.sh
+gce-docker-init
 ```
+
+You can adjustthe settings of the instance by modifing the config_file.
 
 Start the VM:
 
 ```
-./docker-up.sh
+gce-docker-up
 ```
-
 
 To log into the VM:
 
 ```
-./docker-ssh.sh
+gce-docker-ssh
 ```
 
-And to delete the VM:
+You can delete the machine and store the drives by running:
 
 ```
-./docker-delete.sh
+gce-docker-stop
 ```
 
-**DON'T FORGET TO TRANSFER THE NEW IMAGES TO THE REGISTRY AND TO DELETE THE VM WHEN YOU ARE DONE!**
+If you run gce-docker-up in a folder were you run the stop script a new instance is going to be created and the saved drives will be attached to it.
+
+To delete the VM and all the drives:
+
+```
+gce-docker-destroy
+```
