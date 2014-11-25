@@ -50,7 +50,7 @@ echo "Done! Rebooting machine..."
 gcloud compute --project $PROJECT ssh --zone $ZONE $NAME --command "sudo reboot" -q &> /dev/null
 
 echo "You can log into the new machine by running the follwing command:"
-echo "./docker-ssh.sh"
+echo "gce-docker-ssh"
 
 echo "DON'T FORGET TO UPLOAD THE NEW IMAGES TO THE REGISTRY AND DESTROY THE MACHINE ONCE YOU ARE DONE!"
-echo "./docker-delete.sh"
+echo "gce-docker-delete"
