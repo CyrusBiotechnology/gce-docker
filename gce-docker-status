@@ -1,10 +1,14 @@
  #!/bin/bash
 
-  if ! [ -e .lock ]; then
-  echo "VM is not not running."
+if ! [ -e .lock ]; then
+  echo "VM is not running."
   exit -1
 fi
 
+if [ -e .lock-stop ]; then
+  echo "VM has been deleted, the drives have been preserved. You can recreate this machine by running gce-docker-up."
+  exit -1
+fi
 source config_file
 
  gcloud compute instances list | grep $NAME
