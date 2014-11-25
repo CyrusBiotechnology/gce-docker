@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source config_file
+
+if ! [ "$1" = "-y" ]; then
+  echo "Did you save the images to the registry?"
+  sleep 5
+  echo "You have 15 seconds to cancel if not..."
+  sleep 15
+fi
+
+echo "Deleting instance!"
+gcloud compute instances delete -q  $NAME  --delete-disks all \
+--project   $PROJECT --zone   $ZONE
+
+rm .lock
+
+echo "Done."

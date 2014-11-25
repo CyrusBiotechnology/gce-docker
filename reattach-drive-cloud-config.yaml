@@ -1,0 +1,13 @@
+#cloud-config
+coreos:
+  units:
+    - name: var-lib-docker.mount
+      command: start
+      content: |
+        [Unit]
+        Description=Mount ephemeral to /var/lib/docker
+        Before=docker.service
+        [Mount]
+        What=/dev/sdb
+        Where=/var/lib/docker
+        Type=btrfs

@@ -1,0 +1,56 @@
+#!/bin/bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+if ! [ -e config_file ]; then
+  echo "No config_file in this folder, run docker-init.sh to get a default one."
+  exit -1
+fi
+
+
+if ! [ -e .lock ]; then
+
+  source config_file
+  echo "Creating $NAME VM in GCE zone $ZONE"
+  gcloud compute --project $PROJECT instances create $NAME --zone $ZONE --machine-type $MACHINE_TYPE --network "default" --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_only" --image "https://www.googleapis.com/compute/v1/projects/coreos-cloud/global/images/coreos-stable-444-5-0-v20141016" --boot-disk-type $DISK_TYPE_BOOT -q
+
+  echo "Creating hard drive with size $DISK_SIZE"
+  gcloud compute --project $PROJECT disks create ${NAME}-disk --size $DISK_SIZE --zone $ZONE --type $DISK_TYPE_DOCKER_DRIVE -q
+
+  echo "Attaching new disk to $NAME"
+  gcloud compute instances attach-disk $NAME --disk ${NAME}-disk --zone $ZONE -q
+
+  echo "Configuring docker to use the new disk."
+  gcloud compute instances add-metadata --zone $ZONE $NAME --metadata-from-file=user-data=$DIR/new-drive-cloud-config.yaml -q
+
+  touch .lock
+
+else
+
+  if [ -e .lock-stop ]; then
+  source config_file
+  echo "Recreating $NAME VM in GCE zone $ZONE"
+  gcloud compute --project $PROJECT instances create $NAME --zone $ZONE --machine-type $MACHINE_TYPE --network "default" --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_only" --disk "name=docker-javier-a424ad325571c57b881649f712989c50" "mode=rw" "boot=yes" -q
+
+  echo "Attaching disk to $NAME"
+  gcloud compute instances attach-disk $NAME --disk ${NAME}-disk --zone $ZONE -q
+  echo "Configuring docker."
+  gcloud compute instances add-metadata --zone $ZONE $NAME --metadata-from-file=user-data=$DIR/reattach-drive-cloud-config.yaml -q
+  rm .lock-stop
+
+  else
+    echo "VM already running!."
+    exit -1
+  fi
+
+
+fi
+
+echo "Done! Rebooting machine..."
+gcloud compute --project $PROJECT ssh --zone $ZONE $NAME --command "sudo reboot" -q &> /dev/null
+
+echo "You can log into the new machine by running the follwing command:"
+echo "./docker-ssh.sh"
+
+echo "DON'T FORGET TO UPLOAD THE NEW IMAGES TO THE REGISTRY AND DESTROY THE MACHINE ONCE YOU ARE DONE!"
+echo "./docker-delete.sh"

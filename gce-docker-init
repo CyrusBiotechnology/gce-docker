@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if ! [ -e config_file ]; then
+
+  default="\
+export NAME=docker-$USER-`date | md5`
+export ZONE=us-central1-a
+export MACHINE_TYPE=n1-standard-2
+export PROJECT=`gcloud config list | grep project | awk '{print $3}'`
+export DISK_SIZE=100
+export DISK_TYPE_BOOT=pd-standard
+export DISK_TYPE_DOCKER_DRIVE=pd-standard
+"
+
+  echo "$default" > config_file
+  echo "A new config file has been added to this folder, to start a VM in GCE run gce-docker-up."
+
+else
+  echo "This folder already has a config_file!"
+fi

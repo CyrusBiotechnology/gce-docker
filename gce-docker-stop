@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if ! [ -e .lock ]; then
+  echo "VM is not up."
+  exit -1
+fi
+
+source config_file
+
+echo "Deleting instance, preserving the drives."
+gcloud compute instances delete -q  $NAME   --keep-disks all \
+--project   $PROJECT --zone $ZONE
+
+touch .lock-stop

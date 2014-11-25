@@ -1,0 +1,8 @@
+export NAME=docker-javier-cc6a9c7f84c0d5c1605a7579ac0ecaf9
+export ZONE=us-central1-a
+export MACHINE_TYPE=n1-highmem-4
+export PROJECT=cyrusmolcloud
+export DISK_SIZE=100
+export DISK_TYPE_BOOT=pd-ssd
+export DISK_TYPE_DOCKER_DRIVE=pd-ssd
+
