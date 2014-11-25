@@ -1,0 +1,10 @@
+ #!/bin/bash
+
+  if ! [ -e .lock ]; then
+  echo "VM is not not running."
+  exit -1
+fi
+
+source config_file
+
+ gcloud compute instances list | grep $NAME
