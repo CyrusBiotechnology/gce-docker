@@ -30,7 +30,7 @@ else
   if [ -e .lock-stop ]; then
   source config_file
   echo "Recreating $NAME VM in GCE zone $ZONE"
-  gcloud compute --project $PROJECT instances create $NAME --zone $ZONE --machine-type $MACHINE_TYPE --network "default" --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_only" --disk "name=docker-javier-a424ad325571c57b881649f712989c50" "mode=rw" "boot=yes" -q
+  gcloud compute --project $PROJECT instances create $NAME --zone $ZONE --machine-type $MACHINE_TYPE --network "default" --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_only" --disk "name=$NAME" "mode=rw" "boot=yes" -q
 
   echo "Attaching disk to $NAME"
   gcloud compute instances attach-disk $NAME --disk ${NAME}-disk --zone $ZONE -q
