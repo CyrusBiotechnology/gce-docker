@@ -3,12 +3,27 @@ The scripts in this folder create, connect and destroy to a new virtual machine 
 Prerequisites:
 
 -	[Google Cloud SDK](https://cloud.google.com/sdk/)
+```
+curl https://sdk.cloud.google.com | bash
+```
 
-Before you can use this scripts you need to be logged into your account:
+Before you can use any of the gce-docker scripts you need to be logged into your account:
 
 ```
 gcloud auth login
 ```
+
+And you need to set your project:
+
+```
+glcoud config set project cyrusmolcloud
+```
+
+And have the scripts cloned locally:
+```
+git clone https://github.com/CyrusBiotechnology/gce-docker.git
+```
+
 
 Usage
 -----
