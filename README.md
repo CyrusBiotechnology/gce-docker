@@ -24,6 +24,10 @@ And have the scripts cloned locally:
 git clone https://github.com/CyrusBiotechnology/gce-docker.git
 ```
 
+Then add those to your path, for example in your .bashrc:
+```
+export PATH=/Users/lucasnivon/gce-docker:$PATH
+```
 
 Usage
 -----
