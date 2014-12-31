@@ -38,7 +38,7 @@ Create configuration file:
 gce-docker-init
 ```
 
-You can adjustthe settings of the instance by modifing the config_file.
+You can adjust the settings of the instance by modifing the config_file.
 
 Start the VM:
 
@@ -65,3 +65,21 @@ To delete the VM and all the drives:
 ```
 gce-docker-destroy
 ```
+
+GCE Service Authentication
+-----
+
+Docker containers created with these scripts are automagically authenticated with the Cyrus GCE service login. This means that you don't have to re-authenticate to access various utilities through gsutil. However, many utilities are accessed through a shadow docker instance via a set of aliases.
+
+For example, for gsutil:
+
+```
+alias gsutil='(docker images google/cloud-sdk || docker pull google/cloud-sdk) > /dev/null;docker run -t -i --net=host -v /home/lucasnivon/.config:/.config google/cloud-sdk gsutil'
+```
+
+Therefore if you want to call gsutil inside a script you need to run it inside a docker container and setup access into that container from the host.
+Here's an example setting up a call to gsutil to fetch some data and copy into a directory shared by the host:
+```
+docker run -t -i --net=host -v /home/lucasnivon/.config:/.config -v `pwd`/openeyeDL://openeyeDL google/cloud-sdk gsutil  cp gs://openeye/openeye\_ubuntu12_bakerlicense.tgz /openeyeDL
+```
+Note that the .config file is mounted as a volume, and that a subdir of the PWD ("openeyeDL") is mounted as a volume so you can extract data from the container on the host filesystem.
