@@ -16,7 +16,7 @@ gcloud auth login
 And you need to set your project:
 
 ```
-glcoud config set project cyrusmolcloud
+gcloud config set project cyrusmolcloud
 ```
 
 And have the scripts cloned locally:
